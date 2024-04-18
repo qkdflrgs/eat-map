@@ -39,22 +39,30 @@ export default function StoreBox({ store, setStore }: StoreBoxProps) {
                 <AiOutlineClose />
               </button>
             </div>
-            <div className="mt-2 flex gap-2 items-center">
-              <HiOutlineMapPin />
-              {store?.rdn_code_nm}
-            </div>
-            <div className="mt-2 flex gap-2 items-center">
-              <AiOutlinePhone />
-              {store?.tel_no}
-            </div>
-            <div className="mt-2 flex gap-2 items-center">
-              <AiOutlineInfoCircle />
-              {store?.crtfc_gbn_nm}
-            </div>
-            <div className="mt-2 flex gap-2 items-center">
-              <HiOutlineCheck />
-              {store?.bizcnd_code_nm}
-            </div>
+            {store.rdn_code_nm && (
+              <div className="mt-2 flex gap-2 items-center">
+                <HiOutlineMapPin />
+                {store?.rdn_code_nm}
+              </div>
+            )}
+            {store.tel_no && (
+              <div className="mt-2 flex gap-2 items-center">
+                <AiOutlinePhone />
+                {store.tel_no}
+              </div>
+            )}
+            {store.crtfc_gbn_nm && (
+              <div className="mt-2 flex gap-2 items-center">
+                <AiOutlineInfoCircle />
+                {store.crtfc_gbn_nm}
+              </div>
+            )}
+            {store.bizcnd_code_nm && (
+              <div className="mt-2 flex gap-2 items-center">
+                <HiOutlineCheck />
+                {store.bizcnd_code_nm}
+              </div>
+            )}
           </div>
           <button
             type="button"
