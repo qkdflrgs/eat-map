@@ -1,3 +1,4 @@
+import { StoreType } from "@/interface";
 import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 import {
@@ -8,7 +9,7 @@ import {
 import { HiOutlineCheck, HiOutlineMapPin } from "react-icons/hi2";
 
 interface StoreBoxProps {
-  store: any;
+  store: StoreType;
   setStore: Dispatch<SetStateAction<any>>;
 }
 
@@ -22,8 +23,8 @@ export default function StoreBox({ store, setStore }: StoreBoxProps) {
               <div className="flex gap-4 items-center">
                 <Image
                   src={
-                    store?.bizcnd_code_nm
-                      ? `/images/markers/${store.bizcnd_code_nm}.png`
+                    store?.category
+                      ? `/images/markers/${store.category}.png`
                       : "/images/markers/default.png"
                   }
                   alt="아이콘 이미지"
@@ -31,36 +32,36 @@ export default function StoreBox({ store, setStore }: StoreBoxProps) {
                   height={100}
                 />
                 <div>
-                  <div className="font-semibold">{store?.upso_nm}</div>
-                  <div className="text-sm">{store?.cob_code_nm}</div>
+                  <div className="font-semibold">{store?.name}</div>
+                  <div className="text-sm">{store?.storeType}</div>
                 </div>
               </div>
               <button type="button" onClick={() => setStore(null)}>
                 <AiOutlineClose />
               </button>
             </div>
-            {store.rdn_code_nm && (
+            {store.address && (
               <div className="mt-2 flex gap-2 items-center">
                 <HiOutlineMapPin />
-                {store?.rdn_code_nm}
+                {store?.address}
               </div>
             )}
-            {store.tel_no && (
+            {store.phone && (
               <div className="mt-2 flex gap-2 items-center">
                 <AiOutlinePhone />
-                {store.tel_no}
+                {store.phone}
               </div>
             )}
-            {store.crtfc_gbn_nm && (
+            {store.foodCertifyName && (
               <div className="mt-2 flex gap-2 items-center">
                 <AiOutlineInfoCircle />
-                {store.crtfc_gbn_nm}
+                {store.foodCertifyName}
               </div>
             )}
-            {store.bizcnd_code_nm && (
+            {store.category && (
               <div className="mt-2 flex gap-2 items-center">
                 <HiOutlineCheck />
-                {store.bizcnd_code_nm}
+                {store.category}
               </div>
             )}
           </div>
