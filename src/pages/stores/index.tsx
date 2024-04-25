@@ -1,21 +1,61 @@
+import React, { useCallback, useEffect, useRef } from "react";
 import { StoreType } from "@/interface";
 import Image from "next/image";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import Loading from "@/components/Loading";
+import { useRouter } from "next/router";
+import useIntersectionObserver from "@/hooks/useIntersectionObserver";
+import Loader from "@/components/Loader";
 
 export default function StoreListPage() {
+  const router = useRouter();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const pageRef = useIntersectionObserver(ref, {});
+  const isPageEnd = pageRef?.isIntersecting;
+
+  const fetchStores = async ({ pageParam = 1 }) => {
+    const { data } = await axios("/api/stores?page=" + pageParam, {
+      params: {
+        limit: 10,
+        page: pageParam,
+      },
+    });
+
+    return data;
+  };
+
   const {
-    isLoading,
-    isError,
     data: stores,
-  } = useQuery({
+    isFetching,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+    isError,
+    isLoading,
+  } = useInfiniteQuery({
     queryKey: ["stores"],
-    queryFn: async () => {
-      const { data } = await axios("/api/stores");
-      return data as StoreType[];
-    },
+    queryFn: fetchStores,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, all) => all.length + 1,
   });
+
+  const fetchNext = useCallback(async () => {
+    const res = await fetchNextPage();
+    if (res.error) console.log(res.error);
+  }, [fetchNextPage]);
+
+  useEffect(() => {
+    let timerId: NodeJS.Timeout | undefined;
+
+    if (isPageEnd && hasNextPage) {
+      timerId = setTimeout(() => {
+        fetchNext();
+      }, 500);
+    }
+
+    return () => clearTimeout(timerId);
+  }, [fetchNext, isPageEnd, hasNextPage]);
 
   if (isError) {
     return (
@@ -31,41 +71,47 @@ export default function StoreListPage() {
         {isLoading ? (
           <Loading />
         ) : (
-          stores?.map((store, index) => (
-            <li key={index} className="flex justify-between gap-x-6 py-5">
-              <div className="flex gap-x-4">
-                <Image
-                  src={
-                    store.category
-                      ? `/images/markers/${store.category}.png`
-                      : "/images/markers/default.png"
-                  }
-                  alt="아이콘 이미지"
-                  width={48}
-                  height={48}
-                />
-                <div>
-                  <div className="text-sm font-semibold leading-6 text-gray-900">
-                    {store?.name}
+          stores?.pages?.map((page, index) => (
+            <React.Fragment key={index}>
+              {page.data.map((store: StoreType, i: number) => (
+                <li key={i} className="flex justify-between gap-x-6 py-5">
+                  <div className="flex gap-x-4">
+                    <Image
+                      src={
+                        store.category
+                          ? `/images/markers/${store.category}.png`
+                          : "/images/markers/default.png"
+                      }
+                      alt="아이콘 이미지"
+                      width={48}
+                      height={48}
+                    />
+                    <div>
+                      <div className="text-sm font-semibold leading-6 text-gray-900">
+                        {store?.name}
+                      </div>
+                      <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
+                        {store?.storeType}
+                      </div>
+                    </div>
                   </div>
-                  <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
-                    {store?.storeType}
+                  <div className="hidden sm:flex sm:flex-col sm:items-end">
+                    <div className="text-sm font-semibold leading-6 text-gray-900">
+                      {store.address}
+                    </div>
+                    <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
+                      {store?.phone || "번호없음"} | {store?.foodCertifyName} |{" "}
+                      {store?.category}
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div className="hidden sm:flex sm:flex-col sm:items-end">
-                <div className="text-sm font-semibold leading-6 text-gray-900">
-                  {store.address}
-                </div>
-                <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
-                  {store?.phone || "번호없음"} | {store?.foodCertifyName} |{" "}
-                  {store?.category}
-                </div>
-              </div>
-            </li>
+                </li>
+              ))}
+            </React.Fragment>
           ))
         )}
       </ul>
+      {(isFetching || hasNextPage || isFetchingNextPage) && <Loader />}
+      <div className="w-full touch-none h-10 mb-10" ref={ref}></div>
     </div>
   );
 }
