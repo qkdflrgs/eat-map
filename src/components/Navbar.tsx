@@ -24,9 +24,15 @@ export default function Navbar() {
           <Link href="/users/likes" className="navbar__list--item">
             찜한 가게
           </Link>
-          <Link href="/api/auth/signin" className="navbar__list--item">
-            로그인
-          </Link>
+          {status === "authenticated" ? (
+            <button type="button" onClick={() => signOut()}>
+              로그아웃
+            </button>
+          ) : (
+            <Link href="/api/auth/signin" className="navbar__list--item">
+              로그인
+            </Link>
+          )}
         </div>
         {/* mobile button */}
         <div
