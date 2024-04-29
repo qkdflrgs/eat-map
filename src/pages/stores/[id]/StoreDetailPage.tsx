@@ -1,10 +1,7 @@
 import Loader from "@/components/Loader";
-import Map from "@/components/Map";
-import Marker from "@/components/Marker";
 import { StoreType } from "@/interface";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { error } from "console";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -28,7 +25,6 @@ export default function StoreDetailPage() {
     queryKey: [`store-${id}`],
     queryFn: fetchStore,
     enabled: !!id,
-    refetchOnWindowFocus: false,
   });
 
   if (isError) {
@@ -117,8 +113,7 @@ export default function StoreDetailPage() {
       </div>
       {isSuccess && (
         <div className="overflow-hidden w-full mb-20 max-w-5xl mx-auto max-h-[600px]">
-          <Map setMap={setMap} lat={store.lat} lng={store.lng} zoom={1} />
-          <Marker map={map} store={store} />
+          {/* <Map /> */}
         </div>
       )}
     </>
