@@ -1,10 +1,8 @@
 import NextAuth from "next-auth";
-import { PrismaClient } from "@prisma/client";
 import GoogleProvider from "next-auth/providers/google";
 import NaverProvider from "next-auth/providers/naver";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-
-const prisma = new PrismaClient();
+import prisma from "@/db";
 
 export const authOptions = {
   session: {
