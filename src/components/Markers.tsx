@@ -1,7 +1,7 @@
-import { currentStoreState, mapState } from "@/atom";
+import { currentStoreState, locationState, mapState } from "@/atom";
 import { StoreType } from "@/interface";
 import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 interface MarkersProps {
   stores: StoreType[];
@@ -10,6 +10,8 @@ interface MarkersProps {
 export default function Markers({ stores }: MarkersProps) {
   const map = useRecoilValue(mapState);
   const setCurrentStore = useSetRecoilState(currentStoreState);
+  const [location, setLocation] = useRecoilState(locationState);
+
   const loadKakaoMarkers = useCallback(() => {
     if (map) {
       // 식당 데이터 마커 띄위기
@@ -66,10 +68,11 @@ export default function Markers({ stores }: MarkersProps) {
           );
           map.panTo(storeLocation);
           setCurrentStore(store);
+          setLocation({ ...location, lat: store.lat, lng: store.lng });
         });
       });
     }
-  }, [map, setCurrentStore, stores]);
+  }, [map, stores]);
 
   useEffect(() => {
     loadKakaoMarkers();
