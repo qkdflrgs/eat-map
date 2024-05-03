@@ -1,18 +1,3 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
-
 import AddressSearch from "@/components/AddressSearch";
 import { CATEGORY_ARR, FOOD_CERTIFY_ARR, STORE_TYPE_ARR } from "@/data/store";
 import { StoreType } from "@/interface";
@@ -23,17 +8,18 @@ import { toast } from "react-toastify";
 
 export default function StoreNewPage() {
   const router = useRouter();
+
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
   } = useForm<StoreType>();
+
   return (
     <form
       className="px-4 md:max-w-4xl mx-auto py-8"
       onSubmit={handleSubmit(async (data) => {
-        console.log(data);
         try {
           const result = await axios.post("/api/stores", data);
 
@@ -44,6 +30,7 @@ export default function StoreNewPage() {
             toast.error("다시 시도해주세요.");
           }
         } catch (e) {
+          console.log(e);
           toast.error("데이터 생성중 문제가 생겼습니다. 다시 시도해주세요.");
         }
       })}
@@ -135,27 +122,27 @@ export default function StoreNewPage() {
               setValue={setValue}
             />
 
-            <div className="sm:col-span-2 sm:col-start-1">
+            <div className="sm:col-span-3">
               <label
                 htmlFor="foodCertifyName"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                식품인증 구분
+                식품인증구분
               </label>
               <div className="mt-2">
                 <select
                   id="foodCertifyName"
-                  {...(register("foodCertifyName"), { required: true })}
-                  className="block w-full rounded-md border-0 px-2 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  {...register("foodCertifyName", { required: true })}
+                  className="block w-full rounded-md border-0 px-2 outline-none py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 >
-                  <option value="">식품인증 구분 선택</option>
-                  {FOOD_CERTIFY_ARR.map((certify) => (
-                    <option key={certify} value={certify}>
-                      {certify}
+                  <option value="">식품인증구분 선택</option>
+                  {FOOD_CERTIFY_ARR.map((foodCertifyName) => (
+                    <option key={foodCertifyName} value={foodCertifyName}>
+                      {foodCertifyName}
                     </option>
                   ))}
                 </select>
-                {errors.foodCertifyName?.type === "required" && (
+                {errors.category?.type === "required" && (
                   <div className="pt-2 text-xs text-red-600">
                     필수 입력사항입니다.
                   </div>
@@ -163,27 +150,27 @@ export default function StoreNewPage() {
               </div>
             </div>
 
-            <div className="sm:col-span-2">
+            <div className="sm:col-span-3">
               <label
                 htmlFor="storeType"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                업종 구분
+                업종구분
               </label>
               <div className="mt-2">
                 <select
                   id="storeType"
-                  {...(register("storeType"), { required: true })}
-                  className="block w-full rounded-md border-0 px-2 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  {...register("storeType", { required: true })}
+                  className="block w-full rounded-md border-0 px-2 outline-none py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 >
-                  <option value="">업종 구분 선택</option>
+                  <option value="">업종구분 선택</option>
                   {STORE_TYPE_ARR.map((storeType) => (
                     <option key={storeType} value={storeType}>
                       {storeType}
                     </option>
                   ))}
                 </select>
-                {errors.storeType?.type === "required" && (
+                {errors.category?.type === "required" && (
                   <div className="pt-2 text-xs text-red-600">
                     필수 입력사항입니다.
                   </div>
