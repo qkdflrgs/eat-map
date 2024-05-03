@@ -12,7 +12,7 @@ interface ResponseType {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<StoreApiResponse | StoreType[] | StoreType>
+  res: NextApiResponse<StoreApiResponse | StoreType[] | StoreType | null>
 ) {
   const { page = "", limit = "", q, district }: ResponseType = req.query;
 
@@ -20,7 +20,7 @@ export default async function handler(
     // 데이터 생성을 처리
     const formData = req.body;
     const headers = {
-      Authorization: `KAKAOAK ${process.env.KAKAO_CLIENT_ID}`,
+      Authorization: `KakaoAK ${process.env.KAKAO_CLIENT_ID}`,
     };
 
     const { data } = await axios.get(
@@ -29,8 +29,29 @@ export default async function handler(
       )}`,
       { headers }
     );
+
     const result = await prisma.store.create({
-      data: { ...data, lat: data.documents[0].y, lng: data.documents[0].x },
+      data: { ...formData, lat: data.documents[0].y, lng: data.documents[0].x },
+    });
+
+    return res.status(200).json(result);
+  } else if (req.method === "PUT") {
+    // 데이터 수정 처리
+    const formData = req.body;
+    const headers = {
+      Authorization: `KakaoAK ${process.env.KAKAO_CLIENT_ID}`,
+    };
+
+    const { data } = await axios.get(
+      `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURI(
+        formData.address
+      )}`,
+      { headers }
+    );
+
+    const result = await prisma.store.update({
+      where: { id: formData.id },
+      data: { ...formData, lat: data.documents[0].y, lng: data.documents[0].x },
     });
 
     return res.status(200).json(result);
