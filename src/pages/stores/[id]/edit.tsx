@@ -65,7 +65,6 @@ export default function StoreEditPage() {
     <form
       className="px-4 md:max-w-4xl mx-auto py-8"
       onSubmit={handleSubmit(async (data) => {
-        console.log(data);
         try {
           const result = await axios.put("/api/stores", data);
 
