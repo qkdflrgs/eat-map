@@ -19,7 +19,6 @@ async function seedData() {
     const res = await prisma.store.create({
       data: storeData,
     });
-    console.log(res);
   });
 }
 
