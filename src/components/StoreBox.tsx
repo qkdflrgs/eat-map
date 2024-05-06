@@ -10,6 +10,7 @@ import {
 } from "react-icons/ai";
 import { HiOutlineCheck, HiOutlineMapPin } from "react-icons/hi2";
 import { useRecoilState, useRecoilValue } from "recoil";
+import Like from "./Like";
 
 export default function StoreBox() {
   const [store, setStore] = useRecoilState(currentStoreState);
@@ -41,12 +42,15 @@ export default function StoreBox() {
                 <AiOutlineClose />
               </button>
             </div>
-            {store.address && (
-              <div className="mt-2 flex gap-2 items-center">
-                <HiOutlineMapPin />
-                {store?.address}
-              </div>
-            )}
+            <div className="flex justify-between">
+              {store.address && (
+                <div className="mt-2 flex gap-2 items-center col-span-3">
+                  <HiOutlineMapPin />
+                  {store?.address}
+                </div>
+              )}
+              <Like storeId={store.id} />
+            </div>
             {store.phone && (
               <div className="mt-2 flex gap-2 items-center">
                 <AiOutlinePhone />
