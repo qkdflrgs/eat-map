@@ -1,12 +1,33 @@
 /* eslint-disable @next/next/no-img-element */
+import Pagination from "@/components/Pagination";
+import CommentsList from "@/components/comments/CommentsList";
+import { CommentApiResponse } from "@/interface";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function MyPage() {
   const { data: session } = useSession();
+  const router = useRouter();
+  const { page = "1" }: any = router.query;
+
+  const fetchComments = async () => {
+    const { data } = await axios(
+      `/api/comments?&limit=10&page=${page}&user=${true}`
+    );
+
+    return data as CommentApiResponse;
+  };
+
+  const { data: comments, refetch } = useQuery({
+    queryKey: [`comments-${page}`],
+    queryFn: fetchComments,
+  });
 
   return (
-    <div>
-      <div className="md:max-w-5xl mx-auto">
+    <div className="md:max-w-5xl mx-auto px-4 py-8">
+      <div className="px-4 sm:px-0">
         <h3 className="text-base font-semibold leading-7 text-gray-900">
           마이페이지
         </h3>
@@ -42,7 +63,7 @@ export default function MyPage() {
                 alt="사용자 프로필"
                 width={48}
                 height={48}
-                className="rounded-full"
+                className="rounded-full w-12 h-12"
               />
             </dd>
           </div>
@@ -62,6 +83,20 @@ export default function MyPage() {
           </div>
         </dl>
       </div>
+      <div className="mt-8 px-4 sm:px-0">
+        <h3 className="text-base font-semibold leading-7 text-gray-900">
+          내가 쓴 댓글
+        </h3>
+        <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
+          댓글 리스트
+        </p>
+      </div>
+      <CommentsList comments={comments} refetch={refetch} displayStore={true} />
+      <Pagination
+        total={comments?.totalPage}
+        page={page}
+        pathname="/users/my"
+      />
     </div>
   );
 }
