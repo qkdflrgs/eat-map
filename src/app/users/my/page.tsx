@@ -1,3 +1,5 @@
+"use client";
+
 /* eslint-disable @next/next/no-img-element */
 import Pagination from "@/components/Pagination";
 import CommentsList from "@/components/comments/CommentsList";
@@ -5,12 +7,10 @@ import { CommentApiResponse } from "@/interface";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession, signOut } from "next-auth/react";
-import { useRouter } from "next/router";
 
-export default function MyPage() {
+export default function MyPage({ params }: { params: { page: string } }) {
   const { data: session } = useSession();
-  const router = useRouter();
-  const { page = "1" }: any = router.query;
+  const page = params.page || "1";
 
   const fetchComments = async () => {
     const { data } = await axios(

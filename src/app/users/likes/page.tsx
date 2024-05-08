@@ -4,11 +4,9 @@ import StoreList from "@/components/StoreList";
 import { LikeApiResponse, LikeInterface } from "@/interface";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useRouter } from "next/router";
 
-export default function LikesPage() {
-  const router = useRouter();
-  const { page = "1" }: any = router.query;
+export default function LikesPage({ params }: { params: { page: string } }) {
+  const page = params.page || "1";
   const fetchLikes = async () => {
     const { data } = await axios(`/api/likes?limit=10&page=${page}`);
 
@@ -19,6 +17,7 @@ export default function LikesPage() {
     data: likes,
     isError,
     isLoading,
+    isSuccess,
   } = useQuery({
     queryKey: [`likes-${page}`],
     queryFn: fetchLikes,
@@ -43,6 +42,11 @@ export default function LikesPage() {
           likes?.data.map((like: LikeInterface, index) => (
             <StoreList key={index} store={like.store} index={index} />
           ))
+        )}
+        {isSuccess && !!!likes.data.length && (
+          <div className="flex justify-center items-center p-4 border border-gray-200 rounded-md text-sm text-gray-400">
+            찜한 가게가 없습니다.
+          </div>
         )}
       </ul>
       <Pagination

@@ -1,3 +1,5 @@
+"use client";
+
 import AddressSearch from "@/components/AddressSearch";
 import Loader from "@/components/Loader";
 import { CATEGORY_ARR, FOOD_CERTIFY_ARR, STORE_TYPE_ARR } from "@/data/store";
@@ -9,9 +11,9 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-export default function StoreEditPage() {
+export default function StoreEditPage({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const { id } = router.query;
+  const id = params.id;
 
   const fetchStore = async () => {
     const { data } = await axios(`/api/stores?id=${id}`);
