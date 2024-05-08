@@ -1,28 +1,42 @@
-import Layout from "@/components/Layout";
-import "@/styles/globals.css";
-import type { AppProps } from "next/app";
+"use client";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { SessionProvider } from "next-auth/react";
 import { RecoilRoot } from "recoil";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Navbar from "@/components/Navbar";
 
-export default function App({ Component, pageProps }: AppProps) {
-  const { session } = pageProps;
+interface Props {
+  children?: React.ReactNode;
+}
+
+export const NextProvider = ({ children }: Props) => {
   const queryClient = new QueryClient();
 
   return (
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
-        <SessionProvider session={session}>
-          <Layout>
-            <Component {...pageProps} />
-            <ToastContainer autoClose={1000} pauseOnFocusLoss={false} />
-          </Layout>
+        <SessionProvider>
+          {children}
+          <ToastContainer
+            autoClose={1000}
+            pauseOnFocusLoss={false}
+            pauseOnHover={false}
+          />
           <ReactQueryDevtools />
         </SessionProvider>
       </QueryClientProvider>
     </RecoilRoot>
   );
-}
+};
+
+export const NextLayout = ({ children }: Props) => {
+  return (
+    <div className="layout">
+      <Navbar />
+      {children}
+    </div>
+  );
+};
