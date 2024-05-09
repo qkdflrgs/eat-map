@@ -13,7 +13,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-export default function StorePage({ params }: { params: { id: string } }) {
+interface StorePageProps {
+  params: { id: string };
+  searchParams: { page: string };
+}
+
+export default function StorePage({ params, searchParams }: StorePageProps) {
   const router = useRouter();
   const id = params.id;
   const { status } = useSession();
@@ -166,7 +171,7 @@ export default function StorePage({ params }: { params: { id: string } }) {
             <Map lat={store.lat} lng={store.lng} zoom={1} />
             <Marker store={store} />
           </div>
-          <Comments storeId={store.id} />
+          <Comments storeId={store.id} page={searchParams.page} />
         </>
       )}
     </>

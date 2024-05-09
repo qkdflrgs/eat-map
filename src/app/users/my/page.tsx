@@ -8,9 +8,13 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession, signOut } from "next-auth/react";
 
-export default function MyPage({ params }: { params: { page: string } }) {
+export default function MyPage({
+  searchParams,
+}: {
+  searchParams: { page: string };
+}) {
   const { data: session } = useSession();
-  const page = params.page || "1";
+  const page = searchParams.page || "1";
 
   const fetchComments = async () => {
     const { data } = await axios(
