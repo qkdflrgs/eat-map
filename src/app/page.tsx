@@ -4,6 +4,8 @@ import Markers from "@/components/Markers";
 import StoreBox from "@/components/StoreBox";
 import { StoreType } from "@/interface";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const stores: StoreType[] = await getData();
   return (
