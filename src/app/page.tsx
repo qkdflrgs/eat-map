@@ -1,26 +1,11 @@
-import CurrentLocationButton from "@/components/CurrentLocationButton";
 import Map from "@/components/Map";
 import Markers from "@/components/Markers";
 import StoreBox from "@/components/StoreBox";
 import { StoreType } from "@/interface";
-import { useEffect, useState } from "react";
+import CurrentLocationButton from "@/components/CurrentLocationButton";
 
 export default async function Home() {
-  const [stores, setStores] = useState<StoreType[]>([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const data = await getData();
-        setStores(data);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      }
-    }
-
-    fetchData();
-  }, []);
-
+  const stores: StoreType[] = await getData();
   return (
     <>
       <Map />
