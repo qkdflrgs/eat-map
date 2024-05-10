@@ -3,9 +3,24 @@ import Map from "@/components/Map";
 import Markers from "@/components/Markers";
 import StoreBox from "@/components/StoreBox";
 import { StoreType } from "@/interface";
+import { useEffect, useState } from "react";
 
 export default async function Home() {
-  const stores: StoreType[] = await getData();
+  const [stores, setStores] = useState<StoreType[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await getData();
+        setStores(data);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <Map />
