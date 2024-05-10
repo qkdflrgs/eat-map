@@ -1,3 +1,5 @@
+"use client";
+
 import Loading from "@/components/Loading";
 import Pagination from "@/components/Pagination";
 import StoreList from "@/components/StoreList";

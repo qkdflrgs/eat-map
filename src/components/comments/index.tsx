@@ -12,12 +12,12 @@ interface CommentsProps {
   page: string;
 }
 
-export default function Comments({ storeId, page }: CommentsProps) {
+export default function Comments({ storeId, page = "1" }: CommentsProps) {
   const { status } = useSession();
 
   const fetchComments = async () => {
     const { data } = await axios(
-      `/api/comments?storeId=${storeId}&limit=10&page=${page}`
+      `/api/comments?storeId=${storeId}&limit=5&page=${page}`
     );
 
     return data as CommentApiResponse;
