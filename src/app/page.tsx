@@ -6,7 +6,7 @@ import { StoreType } from "@/interface";
 
 export const dynamic = "force-dynamic";
 
-export default async function Home() {
+async function Home() {
   const stores: StoreType[] = await getData();
   return (
     <>
