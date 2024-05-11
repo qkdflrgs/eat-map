@@ -1,3 +1,5 @@
+"use client";
+
 /* eslint-disable @next/next/no-img-element */
 import { CommentApiResponse } from "@/interface";
 import axios from "axios";

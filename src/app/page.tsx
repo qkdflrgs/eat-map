@@ -1,3 +1,5 @@
+"use server";
+
 import Map from "@/components/Map";
 import Markers from "@/components/Markers";
 import StoreBox from "@/components/StoreBox";
@@ -21,6 +23,8 @@ async function getData() {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores`, {
       cache: "no-store",
     });
+
+    console.log("res", res);
 
     if (!res.ok) {
       throw new Error("Failed to fetch data");
