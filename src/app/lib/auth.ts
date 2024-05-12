@@ -25,7 +25,7 @@ export const authOptions: NextAuthOptions = {
     signIn: "/users/login",
   },
   callbacks: {
-    session: ({ session, token }) => ({
+    session: async ({ session, token }) => ({
       ...session,
       user: {
         ...session.user,
