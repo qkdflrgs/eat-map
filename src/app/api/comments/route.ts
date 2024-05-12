@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import prisma from "@/db";
 import { NextResponse } from "next/server";
-import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);

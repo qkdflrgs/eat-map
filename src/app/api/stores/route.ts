@@ -2,7 +2,7 @@ import prisma from "@/db";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import axios from "axios";
-import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
