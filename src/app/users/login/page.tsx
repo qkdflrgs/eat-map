@@ -2,7 +2,6 @@
 
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-
 import { useEffect } from "react";
 import { AiOutlineGoogle } from "react-icons/ai";
 import { SiNaver } from "react-icons/si";
