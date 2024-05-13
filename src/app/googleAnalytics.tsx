@@ -1,3 +1,5 @@
+"use client";
+
 import Script from "next/script";
 import { pageview } from "./lib/gtag";
 import { useEffect } from "react";
